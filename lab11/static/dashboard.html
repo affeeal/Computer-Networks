@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="shortcut icon" href="#">
+		<script>  
+			window.addEventListener("load", function(event) {
+				let outputLast  = document.getElementById("output-last");
+				let outputBlock = document.getElementById("output-block");
+				let outputTxs   = document.getElementById("output-txs");
+							
+				let wsLast  = new WebSocket("ws://localhost:8081/last");
+				let wsBlock = new WebSocket("ws://localhost:8082/block");
+				let wsTxs   = new WebSocket("ws://localhost:8083/txs");
+
+				outputLast.style = "padding-left: 10px;"
+				outputBlock.style = "padding-left: 10px;"
+							
+				wsLast.onmessage = function(event) {
+					let obj = JSON.parse(event.data);
+					console.log("last", obj);
+								
+					outputLast.innerHTML = "";
+					
+					let number = document.createElement("p");
+					number.innerHTML = "<b>Номер</b>: " + obj.number;
+					outputLast.appendChild(number);
+								
+					let time = document.createElement("p");
+					time.innerHTML = "<b>Время</b>: " + new Date(obj.time * 1000);
+					outputLast.appendChild(time);
+								
+					let difficulty = document.createElement("p");
+					difficulty.innerHTML = "<b>Сложность</b>: " + obj.difficulty;
+					outputLast.appendChild(difficulty);
+								
+					let hash = document.createElement("p");
+					hash.innerHTML = "<b>Хэш</b>: " + obj.hash;
+					outputLast.appendChild(hash);
+								
+					let txsLen = document.createElement("p");
+					txsLen.innerHTML = "<b>Число транзакций</b>: " + obj.txs_len;
+					outputLast.appendChild(txsLen);
+				};
+
+				wsBlock.onmessage = function(event) {
+					let obj = JSON.parse(event.data);
+					console.log("block", obj);
+								
+					outputBlock.innerHTML = "";
+					
+					let number = document.createElement("p");
+					number.innerHTML = "<b>Номер</b>: " + obj.number;
+					outputBlock.appendChild(number);
+								
+					let time = document.createElement("p");
+					time.innerHTML = "<b>Время</b>: " + new Date(obj.time * 1000);
+					outputBlock.appendChild(time);
+								
+					let difficulty = document.createElement("p");
+					difficulty.innerHTML = "<b>Сложность</b>: " + obj.difficulty;
+					outputBlock.appendChild(difficulty);
+								
+					let hash = document.createElement("p");
+					hash.innerHTML = "<b>Хэш</b>: " + obj.hash;
+					outputBlock.appendChild(hash);
+								
+					let txsLen = document.createElement("p");
+					txsLen.innerHTML = "<b>Число транзакций</b>: " + obj.txs_len;
+					outputBlock.appendChild(txsLen);
+				}
+
+				wsTxs.onmessage = function(event) {
+					let obj = JSON.parse(event.data);		
+					console.log("txs", obj);
+
+					outputTxs.innerHTML = "";
+					let ul = document.createElement("ul");
+					ul.style = "padding-left: 20px;";
+					
+					obj.forEach((tx) => {
+						let li = document.createElement("li");
+						
+						let chaidId = document.createElement("p");
+						chaidId.innerHTML = "<b>Chain ID</b>: " + tx.chain_id;
+						li.appendChild(chaidId);
+									
+						let hash = document.createElement("p");
+						hash.innerHTML = "<b>Hash</b>: " + tx.hash;
+						li.appendChild(hash);
+									
+						let value = document.createElement("p");
+						value.innerHTML = "<b>Value</b>: " + tx.value;
+						li.appendChild(value);
+									
+						let cost = document.createElement("p");
+						cost.innerHTML = "<b>Cost</b>: " + tx.cost;
+						li.appendChild(cost);
+									
+						let to = document.createElement("p");
+						to.innerHTML = "<b>To</b>: " + tx.to;
+						li.appendChild(to);
+									
+						let gas = document.createElement("p");
+						gas.innerHTML = "<b>Gas</b>: " + tx.gas;
+						li.appendChild(gas);
+									
+						let gasPrice = document.createElement("p");
+						gasPrice.innerHTML = "<b>Gas price</b>: " + tx.gas_price;
+						li.appendChild(gasPrice);
+									
+						ul.appendChild(li);
+					});
+
+					outputTxs.appendChild(ul);
+				}
+			});
+		</script>
+		<style type="text/css">
+			html, body {
+				height: 100%;
+				width: 100%;
+				margin: 0;
+				background-color: #F7F7F7;
+				font-family: Arial, Helvetica, sans-serif;
+			}
+
+			.wrapper {
+				height: 100%;
+				display: flex;
+				justify-content: space-around;
+				align-items: center;
+				
+			}
+
+			.dashboard {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+			}
+			
+			.output {
+				width: 600px;
+				height: 600px;
+				font-size: 14px;
+				background-color: #FFFFFF;
+				border: solid 2px #E7E7E7;
+				overflow: scroll;
+			}
+
+			.span {
+				font-size: 18px;
+				margin-bottom: 30px;			
+			}
+		</style>
+	</head>
+	<body>
+		<div class="wrapper">
+			<div class="dashboard">
+				<span class="span">Последний блок</span>
+				<div class="output" id="output-last"></div>
+			</div>
+			<div class="dashboard">
+				<span class="span">Блок <a href="https://etherscan.io/block/16240027">16240027</a></span>
+				<div class="output" id="output-block"></div>
+			</div>
+			<div class="dashboard">
+				<span class="span">Транзакции блока <a href="https://etherscan.io/block/16240027">16240027</a></span>
+				<div class="output" id="output-txs"></div>
+			</div>
+		</div>
+	</body>
+</html>

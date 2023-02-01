@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="shortcut icon" href="#">
+		<script>  
+			window.addEventListener("load", function(event) {
+			
+				let output = document.getElementById("output");
+				let input = document.getElementById("input");
+				let send = document.getElementById("send");
+				let ws = new WebSocket("ws://localhost:8080/internal/async");
+			
+				let print = function(header, message = "") {
+					let div = document.createElement("div");
+					let b = document.createElement("b");
+					b.textContent = header;
+					div.appendChild(b)
+					
+					if (message) {
+						var span = document.createElement("span");
+						span.textContent = message;
+						div.appendChild(span);
+					}
+					
+					output.appendChild(div);
+					output.scroll(0, output.scrollHeight);
+				};
+				
+				ws.onmessage = function(event) {
+					let obj = JSON.parse(event.data);
+					if (obj.out) {
+						print("Stdout: ", obj.out);
+					}
+					if (obj.err) {
+						print("Stderr: ", obj.err);
+					}
+				};
+			
+				ws.onerror = function(event) {
+					print("Error: ", event.data);
+				};
+			
+				send.onclick = function(event) {
+					print("Send: ", input.value);
+					ws.send(input.value);
+					return false;
+				};
+			});
+		</script>
+		<style type="text/css">
+			body {
+				background-color: #EFEFEF;
+				font-family: Arial, Helvetica, sans-serif;
+			}
+			
+			.wrapper {
+				display: flex;
+			}
+	
+			.workspace, #output {
+				width: 50%;
+				height: 100%;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="wrapper">
+			<div class="workspace">
+				<h2>Асинхронное приложение</h2>
+				<p>Введите bash-команду и нажмите кнопку <i>OK</i>. Непустой результат выполнения <br>
+				отобразится с меткой <b>Stdout</b>, а ошибки - с метками <b>Stderr</b>, <b>Error</b>.</p>
+				<form>
+					<input id="input" type="text" value="ls">
+					<button id="send">OK</button>
+				</form>
+			</div>
+			<div id="output"></div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="shortcut icon" href="#">
+		<style type="text/css">
+			body {
+				background-color: #EFEFEF;
+				font-family: Arial, Helvetica, sans-serif;
+			}
+		</style>
+	</head>
+	<body>
+		<form action="/internal/sync" method="POST">
+			<h2>Синхронное приложение</h2>
+			<p>Введите bash-команду и нажмите <i>OK</i>. Ответ придёт в формате
+			json и будет содержать стандартные потоки вывода и ошибок.</p>
+			<input class="input-text" type="text" name="message" placeholder="ls">
+			<input class="input-submit" type="submit" value="OK">
+		</form>
+	</body>
+</html>

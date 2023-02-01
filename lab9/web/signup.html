@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="shortcut icon" href="#">
+		<style type="text/css">
+			.body {
+				background-color: #EFEFEF;
+				font-family: Arial, Helvetica, sans-serif;
+			}
+
+			.wrapper {
+				margin-top: 200px;
+			}
+
+			.form {
+				width: 300px;
+				height: 300px;
+				padding: 30px;
+				margin: auto;
+				background-color: white;
+				border: 1px solid lightgray;
+			}
+
+			.form__header,
+			.form__main {
+				margin-bottom: 45px
+			}
+			
+			.form__footer {
+				height: 50px;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+				align-items: center;	
+			}
+
+			.form__input {
+				height: 45px;
+				margin-bottom: 30px;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+			}
+			
+			.input-text,
+			.input-password,
+			.input-submit {
+				font-size: 15px;
+				width: 100%;
+				border: 1px solid darkgray;
+			}
+			
+			.a {
+				font-size: 15px;
+				color: gray;
+			}
+
+			.b {
+				font-size: 18px;
+			}
+		</style>
+	</head>
+	<body class="body">
+		<div class="wrapper">
+			<form class="form" action="/signup">
+				<div class="form__header">
+					<b class="b">Регистрация</b>
+				</div>
+				<div class="form__main">
+					<div class="form__input">
+						<label class="label" for="email">Имя пользователя:</label>
+						<input class="input-text" type="text" name="email" id="email">
+					</div>
+					<div class="form__input">
+						<label class="label" for="password">Пароль:</label><br>
+						<input class="input-password" type="password" name="password" id="password">
+					</div>
+				</div>
+				<div class="form__footer">
+					<input class="input-submit" type="submit" value="Зарегистрироваться">
+					<a class="a" href="http://localhost:8080/login">Войти</a>
+				</div>
+			</form>
+		</div>
+	</body>
+		<script>
+			document.querySelector('form').addEventListener('submit', submit);
+			
+			function submit(event) {
+				event.preventDefault();
+
+				let formData = new FormData(event.target);
+				let obj = {};
+				formData.forEach((value, key) => obj[key] = value);
+							
+				let request = new Request(event.target.action, {
+					method: 'POST',
+					body: JSON.stringify(obj),
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				});
+
+				fetch(request).then(
+					function(response) {
+						console.log(response);
+					},
+					function(error) {
+						console.error(error);
+					}
+				);
+			}
+		</script>
+</html>
