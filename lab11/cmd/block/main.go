@@ -36,7 +36,7 @@ func handleBlock(w http.ResponseWriter, r *http.Request) {
 	}
 	defer c.Close()
 
-	ethClient, err := ethclient.Dial("https://mainnet.infura.io/v3/2b77419575644789b219d5a09a0f0f7b")
+	ethClient, err := ethclient.Dial("") // to fill
 	if err != nil {
 		log.Println(err)
 		return
@@ -45,10 +45,10 @@ func handleBlock(w http.ResponseWriter, r *http.Request) {
 
 	ctx := context.Background()
 	config := &firebase.Config{
-		DatabaseURL: "https://lab11-19f34-default-rtdb.firebaseio.com/",
+		DatabaseURL: "", // to fill
 	}
 
-	opt := option.WithCredentialsFile("configs/lab11-19f34-firebase-adminsdk-twk66-b8ae4eaef4.json")
+	opt := option.WithCredentialsFile("") // to fill
 	app, err := firebase.NewApp(ctx, config, opt)
 	if err != nil {
 		log.Println(err)

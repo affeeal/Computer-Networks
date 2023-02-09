@@ -50,7 +50,7 @@ func handleTxs(w http.ResponseWriter, r *http.Request) {
 		DatabaseURL: "https://lab11-19f34-default-rtdb.firebaseio.com/",
 	}
 
-	opt := option.WithCredentialsFile("configs/lab11-19f34-firebase-adminsdk-twk66-b8ae4eaef4.json")
+	opt := option.WithCredentialsFile("") // path to file
 	app, err := firebase.NewApp(ctx, config, opt)
 	if err != nil {
 		log.Println(err)
